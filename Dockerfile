@@ -116,9 +116,9 @@ RUN chmod a+x detect-git-repo-deployment.sh
 
 # export all env to /env.sh file at build time
 RUN touch /env.sh
-RUN eval $(printenv | awk -F= '{print "export " "\""$1"\"""=""\""$2"\"" }' >> /env.sh)
+RUN printenv | while IFS='=' read -r k v; do printf 'export %s="%s"\n' "$k" "$(printf '%s' "$v" | sed 's/"/\\"/g')"; done > /env.sh
 RUN chmod +x /env.sh
 
 # export env again at run time
-CMD eval $(printenv | awk -F= '{print "export " "\""$1"\"""=""\""$2"\"" }' > /env.sh) && supervisord -c /etc/supervisor/conf.d/supervisord.conf
+CMD printenv | while IFS='=' read -r k v; do printf 'export %s="%s"\n' "$k" "$(printf '%s' "$v" | sed 's/"/\\"/g')"; done > /env.sh && supervisord -c /etc/supervisor/conf.d/supervisord.conf
 EXPOSE 8080

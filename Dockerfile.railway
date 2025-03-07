@@ -8,6 +8,6 @@ COPY prepare_supervisord.sh .
 # COPY initial_command.sh .
 RUN chmod +x prepare_supervisord.sh
 # RUN chmod +x initial_command.sh
-CMD /root/prepare_supervisord.sh && echo "===\n" && eval $(printenv | awk -F= '{print "export " "\""$1"\"""=""\""$2"\"" }' > /env.sh) && echo "===\n" && supervisord -c /etc/supervisor/conf.d/supervisord.conf
+CMD /root/prepare_supervisord.sh && echo "===\n" && printenv | while IFS='=' read -r k v; do printf 'export %s="%s"\n' "$k" "$(printf '%s' "$v" | sed 's/"/\\"/g')"; done > /env.sh && echo "===\n" && supervisord -c /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 8080
