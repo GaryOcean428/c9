@@ -8,9 +8,11 @@ WORKDIR /root
 COPY prepare_supervisord.sh .
 COPY setup_database.sh .
 COPY initial_command.sh .
+COPY test_setup.sh .
 RUN chmod +x prepare_supervisord.sh
 RUN chmod +x setup_database.sh  
 RUN chmod +x initial_command.sh
+RUN chmod +x test_setup.sh
 
 # Set default C9SDK_PASSWORD for GaryOcean
 ENV C9SDK_PASSWORD=GaryOcean428
