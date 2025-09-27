@@ -84,12 +84,12 @@ RUN npm i -g pm2 yarn
 
 RUN rm /etc/nginx/sites-enabled/project.conf.template
 
-ARG C9SDK_PASSWORD=password
+ARG C9SDK_PASSWORD=GaryOcean428
 
 COPY .bashrc /tmp/.bashrc
 RUN cat /tmp/.bashrc >> /root/.bashrc
 
-RUN apt install cron sudo zip ruby-full -y
+RUN apt install cron sudo zip ruby-full postgresql-client -y
 RUN gem install bundler
 
 COPY .profile /tmp/.profile
