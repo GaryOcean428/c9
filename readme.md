@@ -8,10 +8,28 @@ This Docker container is a IDE / Code editor, built from [C9 SDK](https://github
 
 ## Variable
 
-- `C9SDK_PASSWORD`: password for basic auth. it would be publically accessible if this env is not defined
+- `C9SDK_PASSWORD`: password for basic auth. Default is "GaryOcean428" for user GaryOcean. The IDE would be publicly accessible if this env is not defined
+- `DATABASE_URL`: PostgreSQL connection string for Railway Postgres service (e.g., `postgresql://user:password@host:port/database`)
+- `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE`, `POSTGRES_PORT`: Individual PostgreSQL connection parameters
 - `GIT_REPO`: automatic git repo deployment
 - `GIT_BRANCH`: target branch, if not present, default branch will be used.
 - `INITIAL_COMMAND`: custom command that can be used for installing custom dependencies or even start your git repo your own way
+
+## GaryOcean Setup
+
+This C9 IDE instance is configured for user **GaryOcean** with:
+- **Username**: GaryOcean  
+- **Default Password**: GaryOcean428
+- **PostgreSQL Support**: Automatic connection to Railway Postgres-8xv service
+- **Database Aliases**: Use `db` or `dbconnect` commands in the terminal to connect to PostgreSQL
+
+## Database Connection
+
+The container automatically detects and configures PostgreSQL connections when deployed on Railway:
+1. Set your `DATABASE_URL` environment variable in Railway
+2. The container will automatically create database connection aliases
+3. Use `db` command in the C9 terminal to connect to your Postgres database
+4. Connection status is shown in the welcome message when you open the terminal
 
 ## What is the best use case for this?
 

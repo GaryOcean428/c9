@@ -1,13 +1,27 @@
 FROM lequanghuylc/c9sdk-pm2-ubuntu:latest
 
-# WORKDIR /root/c9sdk
+# Add PostgreSQL client for database connectivity
+USER root
+RUN apt-get update && apt-get install -y postgresql-client
 
-# CMD pm2 start server.js --name="c9sdk" -- -w / -l 0.0.0.0 -p 3399 -a c9sdk:${C9SDK_PASSWORD} && nginx -c /etc/nginx/nginx.conf && pm2 log 0
 WORKDIR /root
 COPY prepare_supervisord.sh .
-# COPY initial_command.sh .
+COPY setup_database.sh .
+COPY initial_command.sh .
 RUN chmod +x prepare_supervisord.sh
-# RUN chmod +x initial_command.sh
+RUN chmod +x setup_database.sh  
+RUN chmod +x initial_command.sh
+
+# Set default C9SDK_PASSWORD for GaryOcean
+ENV C9SDK_PASSWORD=GaryOcean428
+
+# Add database connection environment variables (will be overridden by Railway)
+ENV POSTGRES_HOST=""
+ENV POSTGRES_PORT="5432"
+ENV POSTGRES_DATABASE=""
+ENV POSTGRES_USER=""
+ENV POSTGRES_PASSWORD=""
+
 CMD /root/prepare_supervisord.sh && echo "===\n" && printenv | while IFS='=' read -r k v; do printf 'export %s="%s"\n' "$k" "$(printf '%s' "$v" | sed 's/"/\\"/g')"; done > /env.sh && echo "===\n" && supervisord -c /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 8080
